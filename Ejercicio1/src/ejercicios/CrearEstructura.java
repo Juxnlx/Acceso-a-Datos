@@ -1,35 +1,35 @@
 package ejercicios;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class CrearEstructura {
     public static void main(String[] args) {
     	
-        String rutaBase = "C:\\Users\\jlbarrionuevo\\";
-        String archivoEstructura = rutaBase + "eclipse-workspace\\Ejercicio1\\src\\ejercicios\\carpetas.txt";
+        String rutaBase = "C:/Users/jlbarrionuevo/";
+        String rutaFichero = rutaBase + "eclipse-workspace/git/repository/Ejercicio1/src/ejercicios/carpetas.txt";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoEstructura))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaFichero))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                if (!linea.trim().isEmpty()) {
-                    Path rutaCompleta = Paths.get(rutaBase, linea);
+                // Crear objeto File para la nueva carpeta
+                File nuevaCarpeta = new File(rutaBase, linea);
 
-                    if (!Files.exists(rutaCompleta)) {
-                        Files.createDirectories(rutaCompleta);
-                        System.out.println("Carpeta creada: " + rutaCompleta);
+                if (!nuevaCarpeta.exists()) { // Comprobamos si ya existe
+                    boolean creada = nuevaCarpeta.mkdir(); // Crear la carpeta
+                    if (creada) {
+                        System.out.println("Carpeta creada: " + nuevaCarpeta.getAbsolutePath());
                     } else {
-                        System.out.println("Ya existe: " + rutaCompleta);
+                        System.out.println("No se pudo crear la carpeta: " + nuevaCarpeta.getAbsolutePath());
                     }
+                } else {
+                    System.out.println("La carpeta ya existe: " + nuevaCarpeta.getAbsolutePath());
                 }
             }
-            System.out.println("\n✅ Estructura de carpetas creada/comprobada en " + rutaBase);
         } catch (IOException e) {
-            System.err.println("Error al crear la estructura: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
