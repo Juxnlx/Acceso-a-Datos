@@ -1,4 +1,4 @@
-package ejercicio2c;
+package tarea1_2c;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
