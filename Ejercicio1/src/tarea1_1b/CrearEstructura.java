@@ -1,4 +1,4 @@
-package ejercicios;
+package tarea1_1b;
 
 import java.io.BufferedReader;
 import java.io.File;

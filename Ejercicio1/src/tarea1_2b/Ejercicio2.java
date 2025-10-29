@@ -1,4 +1,4 @@
-package ejercicios2;
+package tarea1_2b;
 
 import java.io.*;
 
