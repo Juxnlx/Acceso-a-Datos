@@ -22,7 +22,7 @@ public class Ejercicio1_2c {
         // Lista para almacenar las palabras antes de ordenarlas
         List<String> palabras = new ArrayList<>();
 
-        // 1. Lectura: Usamos FileReader y BufferedReader
+        // LUsamos FileReader y BufferedReader
         try (BufferedReader br = new BufferedReader(new FileReader(archivoEntrada))) {
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -36,15 +36,16 @@ public class Ejercicio1_2c {
             return;
         }
 
-        // 2. Ordenación: Ordenamos la lista alfabéticamente
+        // Ordenamos la lista alfabéticamente
         Collections.sort(palabras);
         System.out.println("Palabras ordenadas con éxito.");
 
-        // 3. Escritura: Usamos FileWriter y BufferedWriter
+        // Usamos FileWriter y BufferedWriter
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoSalida))) {
             for (String palabra : palabras) {
                 bw.write(palabra);
-                bw.newLine(); // Equivalente a escribir un salto de línea
+                // Equivalente a escribir un salto de línea
+                bw.newLine(); 
             }
             
             // Forzamos la escritura de los datos del buffer al archivo
