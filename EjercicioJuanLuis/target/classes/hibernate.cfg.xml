@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configuración de conexión -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://dns11036.phdns11.es:3306/ad2526_juanluis_barrionuevo</property>
+        <property name="hibernate.connection.username">ad2526_juanluis_barrionuevo</property>
+        <property name="hibernate.connection.password">12345</property>
+        
+        <!-- Dialecto MySQL -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        
+        <!-- Mostrar SQL en consola -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        
+        <!-- Crear/actualizar tablas automáticamente -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        
+        <!-- Pool de conexiones -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        
+        <!-- Mapeo de entidades -->
+        <mapping class="ProyectoHibernate.EjercicioJuanLuis.entidades.Mesa"/>
+        <mapping class="ProyectoHibernate.EjercicioJuanLuis.entidades.Producto"/>
+        <mapping class="ProyectoHibernate.EjercicioJuanLuis.entidades.Factura"/>
+        <mapping class="ProyectoHibernate.EjercicioJuanLuis.entidades.Pedido"/>
+    </session-factory>
+</hibernate-configuration>
