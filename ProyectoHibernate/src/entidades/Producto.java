@@ -2,68 +2,70 @@ package entidades;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Producto")
+@Table(name = "producto")
 public class Producto {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProducto")
     private int idProducto;
-    
+
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
-    
+
     @Column(name = "precio", nullable = false, precision = 10, scale = 2)
-    private double precio;
-    
+    private BigDecimal precio;
+
     // Relación con Pedido (un producto puede estar en muchos pedidos)
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Pedido> pedidos;
-    
+    private List<Pedido> pedidos = new ArrayList<>();
+
     // Constructores
     public Producto() {
     }
-    
-    public Producto(String nombre, double precio) {
+
+    public Producto(String nombre, BigDecimal precio) {
         this.nombre = nombre;
         this.precio = precio;
     }
-    
+
     // Getters y Setters
     public int getIdProducto() {
         return idProducto;
     }
-    
+
     public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
     }
-    
+
     public String getNombre() {
         return nombre;
     }
-    
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    public double getPrecio() {
+
+    public BigDecimal getPrecio() {
         return precio;
     }
-    
-    public void setPrecio(double precio) {
+
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
-    
+
     public List<Pedido> getPedidos() {
         return pedidos;
     }
-    
+
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
-    
+
     @Override
     public String toString() {
         return "Producto{" +
