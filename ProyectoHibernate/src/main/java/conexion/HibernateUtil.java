@@ -19,6 +19,13 @@ public class HibernateUtil {
      * Inicializa la SessionFactory desde el archivo hibernate.cfg.xml
      */
     static {
+        buildSessionFactory();
+    }
+    
+    /**
+     * Construye la SessionFactory
+     */
+    private static void buildSessionFactory() {
         try {
             // Crear SessionFactory desde el archivo de configuración
             sessionFactory = new Configuration()
@@ -40,7 +47,20 @@ public class HibernateUtil {
      * @return SessionFactory única de la aplicación
      */
     public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
+            buildSessionFactory();
+        }
         return sessionFactory;
+    }
+    
+    /**
+     * Reinicia la SessionFactory.
+     * Útil después de eliminar tablas para que Hibernate las vuelva a crear.
+     */
+    public static void restart() {
+        shutdown();
+        buildSessionFactory();
+        System.out.println("✓ SessionFactory reiniciada correctamente");
     }
     
     /**

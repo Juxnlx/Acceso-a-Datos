@@ -1,12 +1,11 @@
 package entidades;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 @Entity
-@Table(name = "producto")
+@Table(name = "Productos")
 public class Producto {
 
     @Id
@@ -14,21 +13,22 @@ public class Producto {
     @Column(name = "idProducto")
     private int idProducto;
 
-    @Column(name = "nombre", nullable = false, length = 45)
+    @Column(name = "Denominacion", nullable = false, length = 45)
     private String nombre;
 
-    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
-    private BigDecimal precio;
+    @Column(name = "Precio", nullable = false)
+    private double precio;
 
     // Relación con Pedido (un producto puede estar en muchos pedidos)
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
 
-    // Constructores
+    // Constructor vacío (obligatorio para Hibernate)
     public Producto() {
     }
 
-    public Producto(String nombre, BigDecimal precio) {
+    // Constructor con parámetros
+    public Producto(String nombre, double precio) {
         this.nombre = nombre;
         this.precio = precio;
     }
@@ -50,11 +50,11 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public BigDecimal getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

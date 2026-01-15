@@ -1,6 +1,6 @@
 package entidades;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -20,7 +20,7 @@ public class Factura {
     @Column(name = "tipoPago", nullable = false, length = 45)
     private String tipoPago;
     
-    @Column(name = "importe", nullable = false, precision = 10, scale = 2)
+    @Column(name = "Importe", nullable = false)
     private double importe;
     
     // Relación con Pedido (una factura puede tener muchos pedidos)
