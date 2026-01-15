@@ -26,7 +26,6 @@ public class RestauranteCRUDHibernate {
 	 */
 	public static void crearTablas() {
 	    System.out.println("✓ Las tablas se crean/actualizan automáticamente con Hibernate");
-	    System.out.println("  Configuración: hibernate.hbm2ddl.auto=update");
 	    System.out.println("  Tablas disponibles: Mesa, Productos, Factura, Pedido");
 	    System.out.println();
 	    System.out.println("Reiniciando Hibernate y creando tablas...");
