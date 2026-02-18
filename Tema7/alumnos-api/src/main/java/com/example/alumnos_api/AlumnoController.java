@@ -9,6 +9,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,24 +25,42 @@ public class AlumnoController {
     @Autowired
     private AlumnoRepository repo;
     
-    // 1. LISTAR TODOS LOS ALUMNOS (GET)
+ // 1. LISTAR TODOS LOS ALUMNOS (GET) - CON PAGINACIÓN
     @Operation(
-        summary = "Listar todos los alumnos",
-        description = "Obtiene una lista completa de todos los alumnos registrados en el sistema"
+        summary = "Listar todos los alumnos con paginación",
+        description = "Obtiene una lista paginada de todos los alumnos registrados en el sistema. " +
+                      "Soporta ordenación por cualquier campo."
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Lista de alumnos obtenida exitosamente"),
         @ApiResponse(responseCode = "401", description = "No autorizado - Se requiere autenticación")
     })
     @GetMapping
-    public List<Alumno> listar() {
-        return repo.findAll();
+    public Page<Alumno> listar(
+        @Parameter(description = "Número de página (0-indexed)", example = "0")
+        @RequestParam(defaultValue = "0") int page,
+        
+        @Parameter(description = "Tamaño de página", example = "10")
+        @RequestParam(defaultValue = "10") int size,
+        
+        @Parameter(description = "Campo por el que ordenar", example = "nombre")
+        @RequestParam(defaultValue = "id") String sortBy,
+        
+        @Parameter(description = "Dirección de ordenación (asc o desc)", example = "asc")
+        @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") 
+            ? Sort.Direction.DESC 
+            : Sort.Direction.ASC;
+        
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        return repo.findAll(pageable);
     }
     
     // 2. CREAR ALUMNO (POST)
     @Operation(
         summary = "Crear un nuevo alumno",
-        description = "Registra un nuevo alumno en el sistema. El email debe ser único y válido."
+        description = "Registra un nuevo alumno en el sistema. El email debe ser único y válido. La fecha de registro se asigna automáticamente."
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Alumno creado exitosamente"),
@@ -48,7 +70,7 @@ public class AlumnoController {
     @PostMapping
     public Alumno crear(
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Datos del alumno a crear",
+            description = "Datos del alumno a crear (nombre y email requeridos)",
             required = true
         )
         @Valid @RequestBody Alumno alumno
@@ -59,7 +81,7 @@ public class AlumnoController {
     // 3. ACTUALIZAR ALUMNO (PUT)
     @Operation(
         summary = "Actualizar un alumno existente",
-        description = "Actualiza los datos de un alumno identificado por su ID"
+        description = "Actualiza los datos de un alumno identificado por su ID. La fecha de registro original se preserva."
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Alumno actualizado exitosamente"),
@@ -72,7 +94,7 @@ public class AlumnoController {
         @Parameter(description = "ID del alumno a actualizar", required = true, example = "1")
         @PathVariable Long id,
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Nuevos datos del alumno",
+            description = "Nuevos datos del alumno (nombre y email)",
             required = true
         )
         @Valid @RequestBody Alumno alumno
@@ -149,5 +171,22 @@ public class AlumnoController {
         @RequestParam String nombre
     ) {
         return repo.findByNombre(nombre);
+    }
+    
+    // 7. BÚSQUEDA AVANZADA POR NOMBRE (GET) - BONUS
+    @Operation(
+        summary = "Búsqueda avanzada por nombre",
+        description = "Busca alumnos cuyo nombre contenga el texto proporcionado (búsqueda parcial, sin distinguir mayúsculas)"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Búsqueda realizada exitosamente"),
+        @ApiResponse(responseCode = "401", description = "No autorizado - Se requiere autenticación")
+    })
+    @GetMapping("/buscar-avanzado")
+    public List<Alumno> buscarPorNombreAvanzado(
+        @Parameter(description = "Texto a buscar en el nombre del alumno", required = true, example = "Juan")
+        @RequestParam String nombre
+    ) {
+        return repo.findByNombreContainingIgnoreCase(nombre);
     }
 }

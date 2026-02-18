@@ -9,4 +9,7 @@ public interface AlumnoRepository extends JpaRepository<Alumno, Long> {
     // Métodos CRUD heredados
     // Query methods personalizados
     List<Alumno> findByNombre(String nombre);
+    
+    //Búsqueda parcial con LIKE
+    List<Alumno> findByNombreContainingIgnoreCase(String nombre);
 }
